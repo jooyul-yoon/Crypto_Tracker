@@ -7,6 +7,16 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: ${(props) => props.theme.bgColor};
+`;
+
+const H1 = styled.h1`
+  color: ${(props) => props.theme.textColor};
+  padding-right: 20px;
+`;
+
+const Btn = styled.button`
+  background-color: ${(props) => props.theme.btnColor};
 `;
 
 function App() {
@@ -26,6 +36,7 @@ function App() {
 
   return (
     <Wrapper>
+      <H1>Log In</H1>
       <form onSubmit={onSubmit}>
         <input
           value={value}
@@ -33,7 +44,7 @@ function App() {
           type="text"
           placeholder="username"
         />
-        <button>Log in</button>
+        <Btn>Log in</Btn>
       </form>
     </Wrapper>
   );
