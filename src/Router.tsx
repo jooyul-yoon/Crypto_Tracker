@@ -3,7 +3,18 @@ import Coin from "./Routes/Coin";
 import Coins from "./Routes/Coins";
 
 function Router() {
-  return <BrowserRouter></BrowserRouter>;
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/:cId">
+          <Coin />
+        </Route>
+        <Route path="/">
+          <Coins />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
 }
 
 export default Router;
