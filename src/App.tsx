@@ -12,8 +12,8 @@ const Wrapper = styled.div`
 function App() {
   return (
     <Wrapper>
-      <Circle bgColor="teal" />
-      <Circle bgColor="tomato" />
+      <Circle bgColor="teal" borderColor="pink" />
+      <Circle bgColor="tomato" text="Not default" />
     </Wrapper>
   );
 }
