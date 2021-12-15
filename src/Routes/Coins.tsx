@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
@@ -15,6 +16,10 @@ const Header = styled.header`
   align-items: center;
 `;
 
+const Title = styled.h1`
+  color: ${(props) => props.theme.accentColor};
+`;
+
 const CoinsList = styled.ul``;
 
 const Coin = styled.li`
@@ -23,8 +28,9 @@ const Coin = styled.li`
   margin-bottom: 10px;
   border-radius: 15px;
   a {
+    display: flex;
+    align-items: center;
     transition: color 0.2s ease-in;
-    display: block;
     padding: 20px;
   }
   &:hover {
@@ -34,8 +40,10 @@ const Coin = styled.li`
   }
 `;
 
-const Title = styled.h1`
-  color: ${(props) => props.theme.accentColor};
+const Icon = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
 `;
 
 const LoaderAnimation = keyframes`
@@ -85,7 +93,7 @@ function Coins() {
       const response = await fetch("https://api.coinpaprika.com/v1/coins");
       const json = await response.json();
       setCoins(json.slice(0, 100));
-      // setLoading(false);
+      setLoading(false);
     })();
   }, []);
 
@@ -100,7 +108,12 @@ function Coins() {
         <CoinsList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link to={`/${coin.id}`}>
+                <Icon
+                  src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                />
+                {coin.name} &rarr;
+              </Link>
             </Coin>
           ))}
         </CoinsList>
