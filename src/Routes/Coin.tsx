@@ -17,6 +17,13 @@ const Header = styled.header`
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
+  font-size: 30px;
+`;
+
+const Icon = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
 `;
 
 const LoaderAnimation = keyframes`
@@ -47,6 +54,42 @@ const Loader = styled.span`
   }
 `;
 
+const Overview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  color: ${(props) => props.theme.textColor};
+  background-color: rgba(0, 0, 0, 0.6);
+  margin: 10px 0;
+  border-radius: 15px;
+  padding: 20px 20px;
+`;
+
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+
+  span:first-child {
+    font-size: 9px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+  }
+  span:last-child {
+    font-size: 15px;
+  }
+`;
+
+const Description = styled.div`
+  color: ${(props) => props.theme.textColor};
+  font-size: 15px;
+  padding: 0 20px;
+
+  span {
+    line-height: 1.5em;
+  }
+`;
 interface RouteParams {
   cId: string;
 }
@@ -136,9 +179,44 @@ function Coin() {
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "Loading..."}</Title>
+        <Icon
+          src={`https://cryptoicon-api.vercel.app/api/icon/${info?.symbol.toLowerCase()}`}
+        />
+        <Title>
+          {state?.name ? state.name : loading ? <Loader /> : `${info?.name}`}
+        </Title>
       </Header>
-      {loading ? <Loader /> : price?.quotes.USD.ath_price}
+      {loading ? null : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>RANK:</span>
+              <span>{`${info?.rank}`}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>SYMBOL:</span>
+              <span>${`${info?.symbol.toUpperCase()}`}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>OPEN SOURCE:</span>
+              <span>{`${info?.open_source}`}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>
+            <span>{`${info?.description}`}</span>
+          </Description>
+          <Overview>
+            <OverviewItem>
+              <span>TOTAL SUPPLY:</span>
+              <span>{`${price?.total_supply}`}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>MAX SUPPLY:</span>
+              <span>{`${price?.max_supply}`}</span>
+            </OverviewItem>
+          </Overview>
+        </>
+      )}
     </Container>
   );
 }
