@@ -27,18 +27,29 @@ function Chart({ coinId }: ChartProps) {
         "Loading chart..."
       ) : (
         <ApexChart
-          type="line"
-          series={[{ name: "price", data: data?.map((price) => price.close) }]}
+          type="candlestick"
+          series={[
+            {
+              name: "Hello",
+              data: data?.map((val) => [
+                Date.parse(val.time_close),
+                val.open.toFixed(0),
+                val.high.toFixed(0),
+                val.low.toFixed(0),
+                val.close.toFixed(0),
+              ]),
+            },
+          ]}
           options={{
             theme: { mode: "dark" },
             chart: {
-              width: 500,
-              height: 500,
+              width: 480,
+              height: 200,
               toolbar: { show: false },
-              background: "transparent",
+              background: "rgba(0, 0, 0, 0.6)",
             },
-            stroke: { curve: "smooth", width: 3 },
-            yaxis: { labels: { show: false } },
+            title: { text: "Price over 30 days", align: "center" },
+            yaxis: { labels: { show: true } },
             xaxis: {
               type: "datetime",
               axisBorder: { show: false },
@@ -47,14 +58,17 @@ function Chart({ coinId }: ChartProps) {
               categories: data?.map((price) => price.time_close),
             },
             grid: { show: false },
-            fill: {
-              type: "gradient",
-              gradient: { gradientToColors: ["#badc58"], stops: [0, 100] },
-            },
-            colors: ["#ffbe76"],
+            fill: { colors: ["whitesmoke"] },
             tooltip: {
+              enabled: true,
               y: {
-                formatter: (value) => `$${Math.round(value).toLocaleString()}`,
+                formatter: (value) => value.toLocaleString(),
+              },
+            },
+            plotOptions: {
+              candlestick: {
+                colors: { upward: "#686de0", downward: "#ff7979" },
+                wick: { useFillColor: true },
               },
             },
           }}
