@@ -113,7 +113,7 @@ const Tabs = styled.div`
   color: ${(props) => props.theme.bgColor};
 `;
 
-const Tab = styled.a<{ isActive: boolean }>`
+const Tab = styled.div<{ isActive: boolean }>`
   background-color: ${(props) =>
     props.isActive ? props.theme.accentColor : props.theme.cardColor};
   color: ${(props) =>
@@ -270,10 +270,10 @@ function Coin() {
 
           <Tabs>
             <Tab isActive={priceMatch != null}>
-              <Link to={`/${infoData?.id}/price`}>Price Link</Link>
+              <Link to={`/${infoData?.id}/price`}>Price</Link>
             </Tab>
             <Tab isActive={chartMatch != null}>
-              <Link to={`/${infoData?.id}/chart`}>Chart Link</Link>
+              <Link to={`/${infoData?.id}/chart`}>Chart</Link>
             </Tab>
           </Tabs>
 
@@ -282,7 +282,7 @@ function Coin() {
               <Price />
             </Route>
             <Route path={`/:cId/chart`}>
-              <Chart />
+              <Chart coinId={cId} />
             </Route>
           </Switch>
         </>
