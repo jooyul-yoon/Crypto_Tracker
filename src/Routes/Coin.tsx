@@ -11,6 +11,7 @@ import styled, { keyframes } from "styled-components";
 import { fetchCoinInfo, fetchCoinTicker } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -223,11 +224,17 @@ function Coin() {
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", cId],
-    () => fetchCoinTicker(cId)
+    () => fetchCoinTicker(cId),
+    { refetchInterval: 5000 }
   );
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? null : `${infoData?.name}`}
+        </title>
+      </Helmet>
       <Header>
         <Icon
           src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
@@ -242,16 +249,16 @@ function Coin() {
         <>
           <Overview>
             <OverviewItem>
-              <span>RANK:</span>
+              <span>rank:</span>
               <span>{`${infoData?.rank}`}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>SYMBOL:</span>
+              <span>symbol:</span>
               <span>${`${infoData?.symbol.toUpperCase()}`}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>OPEN SOURCE:</span>
-              <span>{`${infoData?.open_source}`}</span>
+              <span>price:</span>
+              <span>{`$${tickersData?.quotes.USD.price.toLocaleString()}`}</span>
             </OverviewItem>
           </Overview>
           <Description>
