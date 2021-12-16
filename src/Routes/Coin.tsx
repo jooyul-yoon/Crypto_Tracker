@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, Route, Switch, useLocation, useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import Chart from "./Chart";
+import Price from "./Price";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -90,6 +92,43 @@ const Description = styled.div`
     line-height: 1.5em;
   }
 `;
+
+const Tabs = styled.div`
+  box-shadow: rgb(0 0 0 / 15%) 0px 1px 1px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px;
+  color: ${(props) => props.theme.bgColor};
+`;
+
+const Tab = styled.a`
+  background: white;
+  border-radius: 3px;
+  display: block;
+  flex: 1 1 0%;
+  font-size: 90%;
+  font-weight: bold;
+  padding: 5px;
+  margin: 0 5px;
+  text-align: center;
+  text-transform: uppercase;
+`;
+
+const RedLink = styled.a`
+  background: rgb(233, 73, 73);
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  color: white;
+  display: block;
+  flex: 1 1 0%;
+  font-size: 90%;
+  font-weight: bold;
+  padding: 5px;
+  text-align: center;
+  text-transform: uppercase;
+`;
+
 interface RouteParams {
   cId: string;
 }
@@ -215,6 +254,24 @@ function Coin() {
               <span>{`${price?.max_supply}`}</span>
             </OverviewItem>
           </Overview>
+
+          <Tabs>
+            <Tab>
+              <Link to={`/${info?.id}/price`}>Price Link</Link>
+            </Tab>
+            <Tab>
+              <Link to={`/${info?.id}/chart`}>Chart Link</Link>
+            </Tab>
+          </Tabs>
+
+          <Switch>
+            <Route path={`/:cId/price`}>
+              <Price />
+            </Route>
+            <Route path={`/:cId/chart`}>
+              <Chart />
+            </Route>
+          </Switch>
         </>
       )}
     </Container>
