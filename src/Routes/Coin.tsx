@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import {
   Link,
   Route,
@@ -8,6 +8,7 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import { fetchCoinInfo, fetchCoinTicker } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -27,6 +28,7 @@ const Header = styled.header`
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
   font-size: 30px;
+  margin: 20px 0;
 `;
 
 const Icon = styled.img`
@@ -44,11 +46,13 @@ const LoaderAnimation = keyframes`
 }
 `;
 
-const Loader = styled.span`
+const Loader = styled.div`
   display: flex;
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 50vh;
   margin: 0 auto;
+  justify-content: center;
+  align-items: center;
 
   &:after {
     content: " ";
@@ -195,12 +199,11 @@ interface PriceData {
 function Coin() {
   const { cId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
-  const [loading, setLoading] = useState(true);
-  const [info, setInfo] = useState<InfoData>();
-  const [price, setPrice] = useState<PriceData>();
   const priceMatch = useRouteMatch("/:cId/price");
   const chartMatch = useRouteMatch("/:cId/chart");
-
+  /* const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState<InfoData>();
+  const [price, setPrice] = useState<PriceData>();
   useEffect(() => {
     (async () => {
       const infoData = await (
@@ -213,54 +216,64 @@ function Coin() {
       setPrice(priceData);
       setLoading(false);
     })();
-  }, [cId]);
-
+  }, [cId]); */
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+    ["info", cId],
+    () => fetchCoinInfo(cId)
+  );
+  const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
+    ["tickers", cId],
+    () => fetchCoinTicker(cId)
+  );
+  const loading = infoLoading || tickersLoading;
   return (
     <Container>
       <Header>
         <Icon
-          src={`https://cryptoicon-api.vercel.app/api/icon/${info?.symbol.toLowerCase()}`}
+          src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
         />
         <Title>
-          {state?.name ? state.name : loading ? <Loader /> : `${info?.name}`}
+          {state?.name ? state.name : loading ? null : `${infoData?.name}`}
         </Title>
       </Header>
-      {loading ? null : (
+      {loading ? (
+        <Loader />
+      ) : (
         <>
           <Overview>
             <OverviewItem>
               <span>RANK:</span>
-              <span>{`${info?.rank}`}</span>
+              <span>{`${infoData?.rank}`}</span>
             </OverviewItem>
             <OverviewItem>
               <span>SYMBOL:</span>
-              <span>${`${info?.symbol.toUpperCase()}`}</span>
+              <span>${`${infoData?.symbol.toUpperCase()}`}</span>
             </OverviewItem>
             <OverviewItem>
               <span>OPEN SOURCE:</span>
-              <span>{`${info?.open_source}`}</span>
+              <span>{`${infoData?.open_source}`}</span>
             </OverviewItem>
           </Overview>
           <Description>
-            <span>{`${info?.description}`}</span>
+            <span>{`${infoData?.description}`}</span>
           </Description>
           <Overview>
             <OverviewItem>
               <span>TOTAL SUPPLY:</span>
-              <span>{`${price?.total_supply}`}</span>
+              <span>{`${tickersData?.total_supply}`}</span>
             </OverviewItem>
             <OverviewItem>
               <span>MAX SUPPLY:</span>
-              <span>{`${price?.max_supply}`}</span>
+              <span>{`${tickersData?.max_supply}`}</span>
             </OverviewItem>
           </Overview>
 
           <Tabs>
             <Tab isActive={priceMatch != null}>
-              <Link to={`/${info?.id}/price`}>Price Link</Link>
+              <Link to={`/${infoData?.id}/price`}>Price Link</Link>
             </Tab>
             <Tab isActive={chartMatch != null}>
-              <Link to={`/${info?.id}/chart`}>Chart Link</Link>
+              <Link to={`/${infoData?.id}/chart`}>Chart Link</Link>
             </Tab>
           </Tabs>
 
