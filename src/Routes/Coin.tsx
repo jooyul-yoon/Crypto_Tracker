@@ -32,10 +32,15 @@ const Title = styled.h1`
   margin: 20px 0;
 `;
 
-const Icon = styled.img`
+const Icon = styled.div`
   width: 30px;
   height: 30px;
   margin-right: 10px;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const LoaderAnimation = keyframes`
@@ -228,6 +233,7 @@ function Coin() {
     { refetchInterval: 5000 }
   );
   const loading = infoLoading || tickersLoading;
+
   return (
     <Container>
       <Helmet>
@@ -236,9 +242,14 @@ function Coin() {
         </title>
       </Helmet>
       <Header>
-        <Icon
-          src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
-        />
+        <Icon>
+          <Link to={"/"}>
+            <img
+              src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
+              alt="icon"
+            />
+          </Link>
+        </Icon>
         <Title>
           {state?.name ? state.name : loading ? null : `${infoData?.name}`}
         </Title>
