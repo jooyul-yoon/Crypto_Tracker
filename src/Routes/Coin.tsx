@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, Route, Switch, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Switch,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
@@ -60,7 +67,7 @@ const Overview = styled.div`
   display: flex;
   justify-content: space-between;
   color: ${(props) => props.theme.textColor};
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: ${(props) => props.theme.cardColor};
   margin: 10px 0;
   border-radius: 15px;
   padding: 20px 20px;
@@ -98,33 +105,24 @@ const Tabs = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 20px;
+  margin: 20px 0;
   color: ${(props) => props.theme.bgColor};
 `;
 
-const Tab = styled.a`
-  background: white;
-  border-radius: 3px;
+const Tab = styled.a<{ isActive: boolean }>`
+  background-color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.cardColor};
+  color: ${(props) =>
+    props.isActive ? props.theme.bgColor : props.theme.textColor};
+  transition: color 0.3s ease-in;
+  transition: background-color 0.3s ease-in;
+  border-radius: 10px;
   display: block;
   flex: 1 1 0%;
   font-size: 90%;
   font-weight: bold;
   padding: 5px;
   margin: 0 5px;
-  text-align: center;
-  text-transform: uppercase;
-`;
-
-const RedLink = styled.a`
-  background: rgb(233, 73, 73);
-  border-bottom-left-radius: 3px;
-  border-top-left-radius: 3px;
-  color: white;
-  display: block;
-  flex: 1 1 0%;
-  font-size: 90%;
-  font-weight: bold;
-  padding: 5px;
   text-align: center;
   text-transform: uppercase;
 `;
@@ -200,6 +198,8 @@ function Coin() {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState<InfoData>();
   const [price, setPrice] = useState<PriceData>();
+  const priceMatch = useRouteMatch("/:cId/price");
+  const chartMatch = useRouteMatch("/:cId/chart");
 
   useEffect(() => {
     (async () => {
@@ -256,10 +256,10 @@ function Coin() {
           </Overview>
 
           <Tabs>
-            <Tab>
+            <Tab isActive={priceMatch != null}>
               <Link to={`/${info?.id}/price`}>Price Link</Link>
             </Tab>
-            <Tab>
+            <Tab isActive={chartMatch != null}>
               <Link to={`/${info?.id}/chart`}>Chart Link</Link>
             </Tab>
           </Tabs>
