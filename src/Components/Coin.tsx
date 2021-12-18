@@ -7,31 +7,29 @@ import {
   useParams,
   useRouteMatch,
 } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTicker } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 import { Helmet } from "react-helmet";
+import Loader from "./Loader";
 
 const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
   margin: 0 auto;
 `;
-
 const Header = styled.header`
   height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-
 const Title = styled.h1`
-  color: ${(props) => props.theme.accentColor};
+  color: ${(props) => props.theme.textColor};
   font-size: 30px;
   margin: 20px 0;
 `;
-
 const Icon = styled.div`
   width: 30px;
   height: 30px;
@@ -42,37 +40,6 @@ const Icon = styled.div`
     height: 30px;
   }
 `;
-
-const LoaderAnimation = keyframes`
-0% {
-  transform: rotate(0deg);
-}
-100% {
-  transform: rotate(360deg);
-}
-`;
-
-const Loader = styled.div`
-  display: flex;
-  width: 100%;
-  height: 50vh;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-
-  &:after {
-    content: " ";
-    display: block;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border-radius: 50%;
-    border: 6px solid #fff;
-    border-color: #fff transparent #fff transparent;
-    animation: ${LoaderAnimation} 1.2s linear infinite;
-  }
-`;
-
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
@@ -81,8 +48,8 @@ const Overview = styled.div`
   margin: 10px 0;
   border-radius: 15px;
   padding: 20px 20px;
+  box-shadow: rgb(0 0 0 / 15%) 0px 1px 1px;
 `;
-
 const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
@@ -99,52 +66,42 @@ const OverviewItem = styled.div`
     font-size: 15px;
   }
 `;
-
-const Description = styled.div`
-  color: ${(props) => props.theme.textColor};
-  font-size: 15px;
-  padding: 0 20px;
-
-  span {
-    line-height: 1.5em;
-  }
-`;
-
 const Tabs = styled.div`
-  box-shadow: rgb(0 0 0 / 15%) 0px 1px 1px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: 10px 0;
   color: ${(props) => props.theme.bgColor};
 `;
-
 const Tab = styled.div<{ isActive: boolean }>`
   background-color: ${(props) =>
-    props.isActive ? props.theme.accentColor : props.theme.cardColor};
+    props.isActive ? props.theme.textColor : props.theme.cardColor};
   color: ${(props) =>
     props.isActive ? props.theme.bgColor : props.theme.textColor};
   transition: color 0.3s ease-in;
   transition: background-color 0.3s ease-in;
   border-radius: 10px;
   display: block;
+  box-shadow: rgb(0 0 0 / 15%) 0px 1px 1px;
   flex: 1 1 0%;
   font-size: 90%;
   font-weight: bold;
-  padding: 5px;
   margin: 0 5px;
   text-align: center;
   text-transform: uppercase;
+  a {
+    display: block;
+    padding: 10px 0;
+    width: 100%;
+    height: 100%;
+  }
 `;
-
 interface RouteParams {
   cId: string;
 }
-
 interface RouteState {
   name: string;
 }
-
 interface InfoData {
   id: string;
   name: string;
@@ -167,7 +124,6 @@ interface InfoData {
   first_data_at: string;
   last_data_at: string;
 }
-
 interface PriceData {
   id: string;
   name: string;
@@ -203,10 +159,6 @@ interface PriceData {
 }
 
 function Coin() {
-  const { cId } = useParams<RouteParams>();
-  const { state } = useLocation<RouteState>();
-  const priceMatch = useRouteMatch("/:cId/price");
-  const chartMatch = useRouteMatch("/:cId/chart");
   /* const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState<InfoData>();
   const [price, setPrice] = useState<PriceData>();
@@ -223,6 +175,11 @@ function Coin() {
       setLoading(false);
     })();
   }, [cId]); */
+
+  const { cId } = useParams<RouteParams>();
+  const { state } = useLocation<RouteState>();
+  const priceMatch = useRouteMatch("/:cId/price");
+  const chartMatch = useRouteMatch("/:cId/chart");
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", cId],
     () => fetchCoinInfo(cId)
@@ -242,23 +199,23 @@ function Coin() {
           {state?.name ? state.name : loading ? null : `${infoData?.name}`}
         </title>
       </Helmet>
-      <Header>
-        <Icon>
-          <Link to={"/"}>
-            <img
-              src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
-              alt="icon"
-            />
-          </Link>
-        </Icon>
-        <Title>
-          {state?.name ? state.name : loading ? null : `${infoData?.name}`}
-        </Title>
-      </Header>
       {loading ? (
         <Loader />
       ) : (
         <>
+          <Header>
+            <Icon>
+              <Link to={"/"}>
+                <img
+                  src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
+                  alt="icon"
+                />
+              </Link>
+            </Icon>
+            <Title>
+              {state?.name ? state.name : loading ? null : `${infoData?.name}`}
+            </Title>
+          </Header>
           <Overview>
             <OverviewItem>
               <span>rank:</span>
@@ -270,20 +227,22 @@ function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>price:</span>
-              <span>{`$${tickersData?.quotes.USD.price.toLocaleString()}`}</span>
+              <span>{`$${parseFloat(
+                tickersData!.quotes.USD.price.toFixed(2)
+              ).toLocaleString()}`}</span>
             </OverviewItem>
           </Overview>
-          <Description>
+          {/* <Description>
             <span>{`${infoData?.description}`}</span>
-          </Description>
+          </Description> */}
           <Overview>
             <OverviewItem>
               <span>TOTAL SUPPLY:</span>
-              <span>{`${tickersData?.total_supply}`}</span>
+              <span>{`${tickersData?.total_supply.toLocaleString()}`}</span>
             </OverviewItem>
             <OverviewItem>
               <span>MAX SUPPLY:</span>
-              <span>{`${tickersData?.max_supply}`}</span>
+              <span>{`${tickersData?.max_supply.toLocaleString()}`}</span>
             </OverviewItem>
           </Overview>
 
@@ -292,13 +251,20 @@ function Coin() {
               <Link to={`/${infoData?.id}/price`}>Price</Link>
             </Tab>
             <Tab isActive={chartMatch != null}>
-              <Link to={`/${infoData?.id}/chart`}>Chart</Link>
+              <Link
+                to={{
+                  pathname: `/${infoData?.id}/chart`,
+                  state: { data: tickersData },
+                }}
+              >
+                Chart
+              </Link>
             </Tab>
           </Tabs>
 
           <Switch>
             <Route path={`/:cId/price`}>
-              <Price />
+              <Price coinId={cId} />
             </Route>
             <Route path={`/:cId/chart`}>
               <Chart coinId={cId} />

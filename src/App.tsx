@@ -1,14 +1,66 @@
 import Router from "./Router";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { lightTheme, darkTheme } from "./Theme";
+import { useState } from "react";
+import { ReactComponent as MoonIcon } from "./icons/moon.svg";
+import { ReactComponent as SunIcon } from "./icons/sun.svg";
+
+const ThemeToggle = styled.button<{ isDark: boolean }>`
+  background: ${({ theme }) => theme.gradient};
+  border: 2px solid ${({ theme }) => theme.toggleBorder};
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.5rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0.5rem;
+  position: relative;
+  width: 8rem;
+  height: 4rem;
+
+  svg {
+    height: auto;
+    width: 2.5rem;
+    transition: all 0.3s linear;
+
+    // sun icon
+    &:first-child {
+      transform: ${(props) =>
+        props.isDark ? "translateY(100px)" : `translateY(0px)`};
+      }
+    
+
+    // moon icon
+    &:last-child {
+      transform: ${(props) =>
+        !props.isDark ? "translateY(100px)" : `translateY(0px)`};
+      }
+      }
+    }
+  }
+`;
 
 function App() {
+  const [isDark, setIsDark] = useState(false);
+  const toggleTheme = () => {
+    isDark ? setIsDark(false) : setIsDark(true);
+  };
+
   return (
-    <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
-    </>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <>
+        <ThemeToggle isDark={isDark} onClick={toggleTheme}>
+          <SunIcon />
+          <MoonIcon />
+        </ThemeToggle>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </>
+    </ThemeProvider>
   );
 }
 

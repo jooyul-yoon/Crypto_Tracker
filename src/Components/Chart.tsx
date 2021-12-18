@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
+import Loader from "./Loader";
 
 interface ChartProps {
   coinId: string;
@@ -24,7 +25,7 @@ function Chart({ coinId }: ChartProps) {
   return (
     <div>
       {isLoading ? (
-        "Loading chart..."
+        <Loader />
       ) : (
         <ApexChart
           type="candlestick"
