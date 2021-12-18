@@ -1,6 +1,6 @@
 ### API Design
 
 - / -> Show all coins
-- /:id -> /btc -> Show coin detail
-  - /btc/info
-  - /btc/chart
+- /:id -> Show coin detail
+- /btc/price -> show price information
+- /btc/chart -> show chart
