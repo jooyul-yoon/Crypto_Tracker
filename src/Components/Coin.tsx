@@ -22,18 +22,23 @@ const Container = styled.div`
 const Header = styled.header`
   height: 10vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+`;
+const HomeIcon = styled.div`
+  img {
+    height: 40px;
+  }
 `;
 const Title = styled.h1`
   color: ${(props) => props.theme.textColor};
   font-size: 30px;
-  margin: 20px 0;
+  font-weight: bold;
 `;
 const Icon = styled.div`
   width: 30px;
   height: 30px;
-  margin-right: 10px;
+  margin-left: 10px;
 
   img {
     width: 30px;
@@ -75,9 +80,9 @@ const Tabs = styled.div`
 `;
 const Tab = styled.div<{ isActive: boolean }>`
   background-color: ${(props) =>
-    props.isActive ? props.theme.textColor : props.theme.cardColor};
+    props.isActive ? props.theme.tabBgColor : props.theme.cardColor};
   color: ${(props) =>
-    props.isActive ? props.theme.bgColor : props.theme.textColor};
+    props.isActive ? props.theme.cardColor : props.theme.textColor};
   transition: color 0.3s ease-in;
   transition: background-color 0.3s ease-in;
   border-radius: 10px;
@@ -182,13 +187,13 @@ function Coin() {
   const chartMatch = useRouteMatch("/:cId/chart");
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", cId],
-    () => fetchCoinInfo(cId)
-    // { refetchInterval: 5000 }
+    () => fetchCoinInfo(cId),
+    { refetchInterval: 5000 }
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", cId],
-    () => fetchCoinTicker(cId)
-    // { refetchInterval: 5000 }
+    () => fetchCoinTicker(cId),
+    { refetchInterval: 5000 }
   );
   const loading = infoLoading || tickersLoading;
 
@@ -204,17 +209,23 @@ function Coin() {
       ) : (
         <>
           <Header>
-            <Icon>
+            <HomeIcon>
               <Link to={"/"}>
                 <img
-                  src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
-                  alt="icon"
-                />
+                  src="https://cdn.iconscout.com/icon/premium/png-256-thumb/cryptocurrency-2627304-2174937.png"
+                  alt="home-logo"
+                ></img>
               </Link>
-            </Icon>
+            </HomeIcon>
             <Title>
               {state?.name ? state.name : loading ? null : `${infoData?.name}`}
             </Title>
+            <Icon>
+              <img
+                src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
+                alt="coin-icon"
+              />
+            </Icon>
           </Header>
           <Overview>
             <OverviewItem>

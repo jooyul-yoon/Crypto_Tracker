@@ -107,14 +107,16 @@ interface IHistorical {
 function Price({ coinId }: PriceProps) {
   const { isLoading: priceLoading, data: priceData } = useQuery<IPriceState>(
     "price",
-    () => fetchCoinTicker(coinId)
+    () => fetchCoinTicker(coinId),
+    { refetchInterval: 5000 }
   );
   const { isLoading: ohlcLoading, data: ohlcData } = useQuery<IHistorical[]>(
     "ohlcv",
-    () => fetchCoinHistory(coinId)
+    () => fetchCoinHistory(coinId),
+    { refetchInterval: 5000 }
   );
-  const isPos = priceData?.quotes.USD.percent_change_30d
-    ? priceData.quotes.USD.percent_change_30d > 0
+  const isPos = priceData?.quotes.USD.percent_change_24h
+    ? priceData.quotes.USD.percent_change_24h > 0
     : false;
   const isLoading = priceLoading || ohlcLoading;
 
@@ -131,13 +133,13 @@ function Price({ coinId }: PriceProps) {
           {isPos ? "+" : null}
           {parseFloat(
             (
-              (priceData!.quotes.USD.percent_change_30d *
+              (priceData!.quotes.USD.percent_change_24h *
                 priceData!.quotes.USD.price) /
               100
             ).toFixed(0)
           ).toLocaleString()}{" "}
           ({isPos ? "+" : null}
-          {priceData!.quotes.USD.percent_change_30d.toFixed(1)}% )
+          {priceData!.quotes.USD.percent_change_24h.toFixed(1)}% )
         </Diff>
         <UpdatedAt>
           updated at {priceData?.last_updated.slice(11, 19)}

@@ -6,6 +6,11 @@ import { useState } from "react";
 import { ReactComponent as MoonIcon } from "./icons/moon.svg";
 import { ReactComponent as SunIcon } from "./icons/sun.svg";
 
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0;
+  margin: 5px;
+`;
 const ThemeToggle = styled.button<{ isDark: boolean }>`
   background: ${({ theme }) => theme.gradient};
   border: 2px solid ${({ theme }) => theme.toggleBorder};
@@ -16,14 +21,14 @@ const ThemeToggle = styled.button<{ isDark: boolean }>`
   justify-content: space-between;
   margin: 0 auto;
   overflow: hidden;
-  padding: 0.5rem;
+  padding: 0.3rem;
   position: relative;
-  width: 8rem;
-  height: 4rem;
+  width: 4rem;
+  height: 2rem;
 
   svg {
     height: auto;
-    width: 2.5rem;
+    width: 1.3rem;
     transition: all 0.3s linear;
 
     // sun icon
@@ -52,10 +57,12 @@ function App() {
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
       <>
-        <ThemeToggle isDark={isDark} onClick={toggleTheme}>
-          <SunIcon />
-          <MoonIcon />
-        </ThemeToggle>
+        <BtnContainer>
+          <ThemeToggle isDark={isDark} onClick={toggleTheme}>
+            <SunIcon />
+            <MoonIcon />
+          </ThemeToggle>
+        </BtnContainer>
         <GlobalStyle />
         <Router />
         <ReactQueryDevtools initialIsOpen={true} />
