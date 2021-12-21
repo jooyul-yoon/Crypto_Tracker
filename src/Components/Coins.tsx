@@ -92,7 +92,7 @@ function Coins() {
   return (
     <Container>
       <Helmet>
-        <title>Crypto</title>
+        <title>Crypto Tracker</title>
       </Helmet>
       <Header>
         <HomeIcon>
