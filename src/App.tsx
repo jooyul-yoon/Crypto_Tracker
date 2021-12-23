@@ -54,8 +54,8 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <>
+    <>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <BtnContainer>
           <ThemeToggle isDark={isDark} onClick={toggleTheme}>
             <SunIcon />
@@ -64,8 +64,8 @@ function App() {
         </BtnContainer>
         <GlobalStyle />
         <Router />
-      </>
-    </ThemeProvider>
+      </ThemeProvider>
+    </>
   );
 }
 
