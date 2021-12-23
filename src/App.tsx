@@ -1,6 +1,5 @@
 import Router from "./Router";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { lightTheme, darkTheme } from "./Theme";
 import { useState } from "react";
 import { ReactComponent as MoonIcon } from "./icons/moon.svg";
@@ -65,7 +64,6 @@ function App() {
         </BtnContainer>
         <GlobalStyle />
         <Router />
-        <ReactQueryDevtools initialIsOpen={false} />
       </>
     </ThemeProvider>
   );

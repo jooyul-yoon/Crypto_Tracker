@@ -96,7 +96,7 @@ function Coins() {
       </Helmet>
       <Header>
         <HomeIcon>
-          <Link to={"/"}>
+          <Link to={"/crypto_tracker"}>
             <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/cryptocurrency-2627304-2174937.png"></img>
           </Link>
         </HomeIcon>
@@ -110,7 +110,7 @@ function Coins() {
             <Coin key={coin.id}>
               <Link
                 to={{
-                  pathname: `/${coin.id}/price`,
+                  pathname: `/crypto_tracker/${coin.id}/price`,
                   state: { name: coin.name },
                 }}
               >

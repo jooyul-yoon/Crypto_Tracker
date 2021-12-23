@@ -210,9 +210,9 @@ function Coin() {
         <>
           <Header>
             <HomeIcon>
-              <Link to={"/"}>
+              <Link to={"/crypto_tracker"}>
                 <img
-                  src="https://cdn.iconscout.com/icon/premium/png-256-thumb/cryptocurrency-2627304-2174937.png"
+                  src="https://cdn.iconscout.com/icon/premium/png-256-thumb/currency-2627304-2174937.png"
                   alt="home-logo"
                 />
               </Link>
@@ -222,7 +222,7 @@ function Coin() {
             </Title>
             <Icon>
               <img
-                src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol}`}
+                src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
                 alt="coin-icon"
               />
             </Icon>
@@ -259,12 +259,12 @@ function Coin() {
 
           <Tabs>
             <Tab isActive={priceMatch != null}>
-              <Link to={`/${infoData?.id}/price`}>Price</Link>
+              <Link to={`/crypto_tracker/${infoData?.id}/price`}>Price</Link>
             </Tab>
             <Tab isActive={chartMatch != null}>
               <Link
                 to={{
-                  pathname: `/${infoData?.id}/chart`,
+                  pathname: `/crypto_tracker/${infoData?.id}/chart`,
                   state: { data: tickersData },
                 }}
               >
@@ -274,10 +274,10 @@ function Coin() {
           </Tabs>
 
           <Switch>
-            <Route path={`/:cId/price`}>
+            <Route path={`/crypto_tracker/:cId/price`}>
               <Price coinId={cId} />
             </Route>
-            <Route path={`/:cId/chart`}>
+            <Route path={`/crypto_tracker/:cId/chart`}>
               <Chart coinId={cId} />
             </Route>
           </Switch>
