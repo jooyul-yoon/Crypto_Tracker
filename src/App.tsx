@@ -65,7 +65,7 @@ function App() {
         </BtnContainer>
         <GlobalStyle />
         <Router />
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={false} />
       </>
     </ThemeProvider>
   );
