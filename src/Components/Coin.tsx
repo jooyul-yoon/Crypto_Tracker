@@ -214,7 +214,7 @@ function Coin() {
                 <img
                   src="https://cdn.iconscout.com/icon/premium/png-256-thumb/cryptocurrency-2627304-2174937.png"
                   alt="home-logo"
-                ></img>
+                />
               </Link>
             </HomeIcon>
             <Title>
@@ -222,7 +222,7 @@ function Coin() {
             </Title>
             <Icon>
               <img
-                src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
+                src={`https://cryptoicon-api.vercel.app/api/icon/${infoData?.symbol}`}
                 alt="coin-icon"
               />
             </Icon>
