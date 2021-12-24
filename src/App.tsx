@@ -49,10 +49,7 @@ const ThemeToggle = styled.button<{ isDark: boolean }>`
 
 function App() {
   const [isDark, setIsDark] = useState(false);
-  const toggleTheme = () => {
-    isDark ? setIsDark(false) : setIsDark(true);
-  };
-
+  const toggleTheme = () => setIsDark((current) => !current);
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
