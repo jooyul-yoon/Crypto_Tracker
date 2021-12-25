@@ -1,53 +1,8 @@
 import Router from "./Router";
-import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./Theme";
-import { useState } from "react";
-import { ReactComponent as MoonIcon } from "./icons/moon.svg";
-import { ReactComponent as SunIcon } from "./icons/sun.svg";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "./atoms";
-
-const BtnContainer = styled.div`
-  position: absolute;
-  right: 0;
-  margin: 5px;
-`;
-const ThemeToggle = styled.button<{ isDark: boolean }>`
-  background: ${({ theme }) => theme.gradient};
-  border: 2px solid ${({ theme }) => theme.toggleBorder};
-  border-radius: 30px;
-  cursor: pointer;
-  display: flex;
-  font-size: 0.5rem;
-  justify-content: space-between;
-  margin: 0 auto;
-  overflow: hidden;
-  padding: 0.3rem;
-  position: relative;
-  width: 4rem;
-  height: 2rem;
-
-  svg {
-    height: auto;
-    width: 1.3rem;
-    transition: all 0.3s linear;
-
-    // sun icon
-    &:first-child {
-      transform: ${(props) =>
-        props.isDark ? "translateY(100px)" : `translateY(0px)`};
-      }
-    
-
-    // moon icon
-    &:last-child {
-      transform: ${(props) =>
-        !props.isDark ? "translateY(100px)" : `translateY(0px)`};
-      }
-      }
-    }
-  }
-`;
 
 function App() {
   const isDark = useRecoilValue(isDarkAtom);
