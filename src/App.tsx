@@ -4,6 +4,8 @@ import { lightTheme, darkTheme } from "./Theme";
 import { useState } from "react";
 import { ReactComponent as MoonIcon } from "./icons/moon.svg";
 import { ReactComponent as SunIcon } from "./icons/sun.svg";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./atoms";
 
 const BtnContainer = styled.div`
   position: absolute;
@@ -48,17 +50,10 @@ const ThemeToggle = styled.button<{ isDark: boolean }>`
 `;
 
 function App() {
-  const [isDark, setIsDark] = useState(false);
-  const toggleTheme = () => setIsDark((current) => !current);
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-        <BtnContainer>
-          <ThemeToggle isDark={isDark} onClick={toggleTheme}>
-            <SunIcon />
-            <MoonIcon />
-          </ThemeToggle>
-        </BtnContainer>
         <GlobalStyle />
         <Router />
       </ThemeProvider>

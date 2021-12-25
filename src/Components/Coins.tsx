@@ -2,9 +2,13 @@
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
+import { isDarkAtom } from "../atoms";
 import Loader from "./Loader";
+import { ReactComponent as MoonIcon } from "../icons/moon.svg";
+import { ReactComponent as SunIcon } from "../icons/sun.svg";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -28,6 +32,44 @@ const Title = styled.h1`
   font-size: 30px;
   font-weight: bold;
   margin: 20px 0;
+`;
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0;
+  margin: 5px;
+`;
+const ThemeToggle = styled.button<{ isDark: boolean }>`
+  background: ${({ theme }) => theme.gradient};
+  border: 2px solid ${({ theme }) => theme.toggleBorder};
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.5rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0.3rem;
+  position: relative;
+  width: 4rem;
+  height: 2rem;
+  svg {
+    height: auto;
+    width: 1.3rem;
+    transition: all 0.3s linear;
+    // sun icon
+    &:first-child {
+      transform: ${(props) =>
+        props.isDark ? "translateY(100px)" : `translateY(0px)`};
+      }
+    
+    // moon icon
+    &:last-child {
+      transform: ${(props) =>
+        !props.isDark ? "translateY(100px)" : `translateY(0px)`};
+      }
+      }
+    }
+  }
 `;
 const CoinsList = styled.ul`
   display: grid;
@@ -87,6 +129,9 @@ function Coins() {
     })();
   }, []); 
   */
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleTheme = () => setDarkAtom((prev) => !prev);
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
 
   return (
@@ -101,6 +146,12 @@ function Coins() {
           </Link>
         </HomeIcon>
         <Title>Crypto</Title>
+        <BtnContainer>
+          <ThemeToggle isDark={isDark} onClick={toggleTheme}>
+            <SunIcon />
+            <MoonIcon />
+          </ThemeToggle>
+        </BtnContainer>
       </Header>
       {isLoading ? (
         <Loader />

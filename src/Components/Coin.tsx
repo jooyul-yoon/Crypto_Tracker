@@ -13,6 +13,10 @@ import Chart from "./Chart";
 import Price from "./Price";
 import { Helmet } from "react-helmet";
 import Loader from "./Loader";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
+import { ReactComponent as MoonIcon } from "../icons/moon.svg";
+import { ReactComponent as SunIcon } from "../icons/sun.svg";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -22,7 +26,7 @@ const Container = styled.div`
 const Header = styled.header`
   height: 10vh;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 `;
 const HomeIcon = styled.div`
@@ -32,17 +36,55 @@ const HomeIcon = styled.div`
 `;
 const Title = styled.h1`
   color: ${(props) => props.theme.textColor};
+  margin: 0 10px;
   font-size: 30px;
   font-weight: bold;
 `;
 const Icon = styled.div`
   width: 30px;
   height: 30px;
-  margin-left: 10px;
 
   img {
     width: 30px;
     height: 30px;
+  }
+`;
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0;
+  margin: 5px;
+`;
+const ThemeToggle = styled.button<{ isDark: boolean }>`
+  background: ${({ theme }) => theme.gradient};
+  border: 2px solid ${({ theme }) => theme.toggleBorder};
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.5rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0.3rem;
+  position: relative;
+  width: 4rem;
+  height: 2rem;
+  svg {
+    height: auto;
+    width: 1.3rem;
+    transition: all 0.3s linear;
+    // sun icon
+    &:first-child {
+      transform: ${(props) =>
+        props.isDark ? "translateY(100px)" : `translateY(0px)`};
+      }
+    
+    // moon icon
+    &:last-child {
+      transform: ${(props) =>
+        !props.isDark ? "translateY(100px)" : `translateY(0px)`};
+      }
+      }
+    }
   }
 `;
 const Overview = styled.div`
@@ -196,6 +238,9 @@ function Coin() {
     { refetchInterval: 5000 }
   );
   const loading = infoLoading || tickersLoading;
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleTheme = () => setDarkAtom((prev) => !prev);
 
   return (
     <Container>
@@ -226,6 +271,13 @@ function Coin() {
                 alt="coin-icon"
               />
             </Icon>
+
+            <BtnContainer>
+              <ThemeToggle isDark={isDark} onClick={toggleTheme}>
+                <SunIcon />
+                <MoonIcon />
+              </ThemeToggle>
+            </BtnContainer>
           </Header>
           <Overview>
             <OverviewItem>
