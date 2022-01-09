@@ -76,14 +76,12 @@ const ThemeToggle = styled.button<{ isDark: boolean }>`
     &:first-child {
       transform: ${(props) =>
         props.isDark ? "translateY(100px)" : `translateY(0px)`};
-      }
-    
+    }
+
     // moon icon
     &:last-child {
       transform: ${(props) =>
         !props.isDark ? "translateY(100px)" : `translateY(0px)`};
-      }
-      }
     }
   }
 `;
